@@ -7,10 +7,13 @@ public class Lab7 {
         LLN next;
 
         LLN() {
+            this.val = 0;
+            this.next = null;
         }
 
         LLN(int val) {
             this.val = val;
+            this.next = null;
         }
 
         LLN(int val, LLN next) {
@@ -78,136 +81,52 @@ public class Lab7 {
     }
 
     /**
-     * this method lists the operations performed *
+     * TODO *
      *
      * @param head
      * @param operations
      * @return
      */
     public LLN listOps(LLN head, int[] operations) {
-        // create Lab7 linked list
-//        Lab7 lln = new Lab7();
-//        lln.head = head;
-//        while(head.next!=null) {
-//            lln.head.next = head.next;
-//        }
-
-        for(int i = 0; i < operations.length; i++) {
-            if(operations[i]==0) {
-                return opsZero(head);
+        if(head == null) {
+            return null;
+        }
+        LLN node = new LLN();
+        for(int i : operations) {
+            switch(i) {
+                case 0:
+                    node = opsZero(head);
+                    break;
+                case 1:
+                    head = opsOne(head);
+                    break;
+                case 2:
+                    head = opsTwo(head);
+                    break;
             }
-            if(operations[i]==1) {
-                return opsOne(head);
-            }
-            if(operations[i]==2) {
-                return opsTwo(head);
-            }
         }
-
-        return null;
-    }
-
-    public Lab7 reverse2(Lab7 lln) {
-        Lab7 result = new Lab7();
-        int numNodes = getNumNodes(lln);
-        int num = (int) Math.ceil(numNodes/2);
-        result.head = get(lln,numNodes);
-        result.head = result.head.next;
-        Lab7 rev = reverse(lln);
-        result.head.next = rev.get(rev,2);
-        result.head = result.head.next;
-        int number = getNumNodes(rev);
-        for(int i = number-2; i > num; i--) {
-            result.head.next = get(rev,i);
-            result.head = result.head.next;
+        if(operations.length==1 && operations[0]==0) {
+            return node;
         }
-
-        Lab7 first = new Lab7();
-        int counts = numNodes - num;
-        first.head = get(lln,1);
-        first.head = first.head.next;
-        for(int i = 2; i < numNodes; i++) {
-            first.head = get(lln,i);
-        }
-
-
-        Lab7 last = new Lab7();
-
-        last.head = first.head;
-        for(int i = 2; i < counts; i++) {
-            last.head.next = get(first,i);
-            last.head = last.head.next;
-        }
-        last.head.next = get(result,numNodes - counts);
-        last.head = last.head.next;
-        for(int i = (numNodes - counts - 1); i > 1; i--) {
-            last.head = get(result, i);
-        }
-
-//        Lab7 other = new Lab7();
-//        int difference = size(lln) - number;
-//        other.head = lln.head;
-//        other.head = other.head.next;
-//        for(int i = 1; i < difference; i++) {
-//            other.head = get(lln,i);
-//        }
-//
-//        Lab7 last = new Lab7();
-//
-//        int theSize = size(other) + size(result);
-//
-//        last.head = other.head;
-//
-//        for(int i = 1; i < size(other); i++) {
-//            last.head.next = get(other,i);
-//            last.head = last.head.next;
-//        }
-//
-//        last.head.next = result.head;
-//
-//        for(int i = 1; i < size(result); i++) {
-//            last.head.next = get(result,i);
-//            last.head = last.head.next;
-//        }
-
-
-        return last;
+        return head;
     }
 
     /**
-     * this function returns the size of the linked list
-     * @param lln
+     * gets the size
+     * @param head
      * @return
      */
-    public int size(Lab7 lln) {
-        int counter = 0;
-        if(lln.head==null) {
+    public int size(LLN head) {
+        if(head==null) {
             return 0;
         }
-        while(lln.head!=null) {
-            counter++;
-            lln.head = lln.head.next;
+        LLN node = head;
+        int i = 1;
+        while(node.next!=null) {
+            node = node.next;
+            i++;
         }
-        return counter;
-    }
-
-    /**
-     * this function reverses the linked list
-     * @param lln
-     * @return
-     */
-    public Lab7 reverse(Lab7 lln) {
-        Lab7 result = new Lab7();
-        int numNodes = getNumNodes(lln);
-        int size = size(lln);
-        result.head = lln.get(lln, size);
-        LLN next = null;
-        for(int i = numNodes; i > 0; i--) {
-            next = get(lln,i);
-            result.head.next=next;
-            //result.head=result.next;
-        }
-        return result;
+        return i;
     }
 
     /**
@@ -217,114 +136,45 @@ public class Lab7 {
      * @return
      */
     public LLN opsZero(LLN head) {
-        Lab7 lln = new Lab7();
-        lln.head = head;
-        while(head.next!=null) {
-            lln.head.next = head.next;
+        if(head==null) {
+            return null;
         }
-
-
-        int numNodes = getNumNodes(lln);
-        int mid = (int) Math.floor(numNodes/2);
-
-        return get(lln,mid);
+        int size = size(head);
+        int mid = (int) Math.ceil(((double)size-1)/2);
+        LLN node = head;
+        for(int i = 0; i < mid; i++) {
+            node = node.next;
+        }
+        System.out.println(node.val);
+        return node;
     }
 
     /**
-     * this function find the middle node in a linked list
-     * @param lln
-     * @return
-     */
-    public LLN findMiddle(LLN head) {
-        Lab7 lln = new Lab7();
-        lln.head = head;
-        while(head.next!=null) {
-            lln.head.next = head.next;
-        }
-
-
-        int numNodes = getNumNodes(lln);
-        int mid = (int) Math.floor(numNodes/2);
-
-
-//        for(int i = 0; i < numNodes; i++) {
-//            if(i==0&&mid!=0) {
-//                lln.head=lln.head.next;
-//            }
-//            if(i==mid) {
-//                return lln.head;
-//            }
-//            lln.head=lln.head.next;
-//        }
-        return get(lln,mid);
-    }
-
-    /**
-     * this method gets a specific node 1-n
-     * @param lln
-     * @param n
-     * @return
-     */
-    public LLN get(Lab7 lln, int n) {
-        int counter = 1;
-        if(counter == n) {
-            return lln.head;
-        }
-        while(counter != n) {
-            lln.head = lln.head.next;
-            counter++;
-        }
-        return lln.head;
-    }
-
-    /**
-     * this method gets the number of nodes in a Linked list
-     * @param lln
-     * @return
-     */
-    public int getNumNodes(Lab7 lln) {
-        int counter = 0;
-        LLN head = lln.head;
-        if(head!=null) {
-            counter = 1;
-        } else {
-            return -1;
-        }
-        while(head.next!=null) {
-            counter++;
-            head = head.next;
-        }
-        return counter;
-    }
-
-    /**
-     * reverses*
+     * TODO*
      *
      * @param head
      * @return
      */
     public LLN opsOne(LLN head) {
-        Lab7 lln = new Lab7();
-        lln.head = head;
-        while(head.next!=null) {
-            head = head.next;
-            lln.head.next = head;
-            lln.head = lln.head.next;
+        if(head==null) {
+            return null;
         }
-
-        int number = getNumNodes(lln);
-
-        Lab7 list = new Lab7();
-        list.head = get(lln,number);
-        for(int i = number - 1; i > 0; i--) {
-            list.head.next = get(lln,i);
-            list.head = list.head.next;
-        }
-
-        return list.head;
+        return reverse(head);
     }
 
-
+    private LLN reverse(LLN node) {
+        if(node.next==null) {
+            return node;
+        }
+        head = reverse(node.next);
+        LLN current = head;
+        while(current.next!=null) {
+            current = current.next;
+        }
+        current.next = node;
+        node.next = null;
+        return head;
+    }
 
     /**
      * TODO*
@@ -333,51 +183,20 @@ public class Lab7 {
      * @return
      */
     public LLN opsTwo(LLN head) {
-        // try
-        Lab7 lln = new Lab7();
-        lln.head = head;
-        while(head.next!=null) {
-            lln.head.next = head.next;
-            lln.head = lln.head.next;
+        if(head==null) {
+            return null;
         }
-
-        Lab7 result = new Lab7();
-        int numNodes = getNumNodes(lln);
-        int num = (int) Math.ceil(numNodes/2);
-        result.head = get(lln,numNodes);
-        result.head = result.head.next;
-        Lab7 rev = reverse(lln);
-        result.head.next = rev.get(rev,2);
-        result.head = result.head.next;
-        int number = getNumNodes(rev);
-        for(int i = number-2; i > num; i--) {
-            result.head.next = get(rev,i);
-            result.head = result.head.next;
+        if(head.next==null) {
+            return head;
         }
-
-        Lab7 first = new Lab7();
-        int counts = numNodes - num;
-        first.head = get(lln,1);
-        first.head = first.head.next;
-        for(int i = 2; i < numNodes; i++) {
-            first.head = get(lln,i);
+        int size = size(head);
+        int mid = (int) Math.ceil(((double)size-1)/2);
+        LLN node = head;
+        for(int i = 0; i < mid-1; i++) {
+            node = node.next;
         }
-
-
-        Lab7 last = new Lab7();
-
-        last.head = first.head;
-        for(int i = 2; i < counts; i++) {
-            last.head.next = get(first,i);
-            last.head = last.head.next;
-        }
-        last.head.next = get(result,numNodes - counts);
-        last.head = last.head.next;
-        for(int i = (numNodes - counts - 1); i > 1; i--) {
-            last.head = get(result, i);
-        }
-
-        return last.head;
+        node.next = reverse(node.next);
+        return head;
     }
 
     public static void main(String[] args) {
@@ -391,7 +210,7 @@ public class Lab7 {
 
         //Reverse whole list
         LLN ret;
-        ret = lln.listOps(new int[]{1});
+        ret = lln.listOps(new int[]{0,1,2});
         lln.print(ret);//5->4->3->2->1->0->NULL
 
         //Test your code here
